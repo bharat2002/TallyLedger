@@ -43,7 +43,13 @@ public class RestExeptionHandler {
     public ErrorResponseDTO handleConstraintViolation(ConstraintViolationException exception, HttpServletRequest request) {
         List<String> errors = exception.getConstraintViolations()
                 .stream()
-                .map(cv -> cv.getPropertyPath() + ": " + cv.getMessage())
+                .map(cv -> {
+                    String param = cv.getPropertyPath().toString();
+                    if (param.contains(".")) {
+                        param = param.substring(param.lastIndexOf('.') + 1);
+                    }
+                    return param + ": " + cv.getMessage();
+                })
                 .collect(Collectors.toList());
 
         return new ErrorResponseDTO.ErrorResponseBuilder()

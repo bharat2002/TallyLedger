@@ -5,12 +5,14 @@ import com.bharatp.TallyLedger.Company.service.CompanyService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/companies")
+@Validated
 public class CompanyController {
     private final CompanyService service;
 
