@@ -34,11 +34,12 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public CompanyDTO get(@PathVariable @Min(1) Long id) {
-        return service.findbyId(id);
+        return service.findById(id);
     }
 
     @PutMapping("/{id}")
     public CompanyDTO update(@PathVariable @Min(1) Long id, @RequestBody @Valid CompanyDTO dto) {
+        dto.setId(id);
         return service.update(dto);
     }
 

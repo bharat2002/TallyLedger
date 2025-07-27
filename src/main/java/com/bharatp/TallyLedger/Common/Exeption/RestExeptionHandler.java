@@ -3,6 +3,7 @@ package com.bharatp.TallyLedger.Common.Exeption;
 import com.bharatp.TallyLedger.Common.Defines.CustomHTTPStatus;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -101,4 +102,21 @@ public class RestExeptionHandler {
                 .setErrors(List.of(ex.getMessage()))
                 .create();
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDTO handleDuplicateEntry(DataIntegrityViolationException ex, HttpServletRequest request)
+    {
+        String message = "Duplicate entry. Entry with the same name may already exist.";
+        return new ErrorResponseDTO.ErrorResponseBuilder()
+                .setTimeStamp(LocalDateTime.now())
+                .setStatus(HttpStatus.CONFLICT.value())
+                .setError(HttpStatus.CONFLICT.getReasonPhrase())
+                .setMessage(message)
+                .setPath(request.getRequestURI())
+                .setErrors(List.of(message))
+                .create();
+    }
+
+
 }

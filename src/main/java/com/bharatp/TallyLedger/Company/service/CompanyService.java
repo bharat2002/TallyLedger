@@ -8,12 +8,14 @@ import com.bharatp.TallyLedger.Company.repository.CompanyRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CompanyService {
-    public final CompanyRepository repo;
-    public final CompanyMapper mapper;
+
+    private final CompanyRepository repo;
+    private final CompanyMapper mapper;
 
     @Autowired
     public CompanyService(CompanyRepository repo, CompanyMapper mapper) {
@@ -21,37 +23,39 @@ public class CompanyService {
         this.mapper = mapper;
     }
 
-    public  CompanyDTO create(CompanyDTO dto)
-    {
+    public CompanyDTO create(@Valid CompanyDTO dto) {
         CompanyEntity entity = mapper.toEntity(dto);
         entity = repo.save(entity);
         return mapper.toDTO(entity);
     }
 
-    public List<CompanyDTO> findAll()
-    {
-        return repo.findAll().stream().map(mapper::toDTO).toList();
+    public List<CompanyDTO> findAll() {
+        return repo.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public CompanyDTO findbyId(Long Id)
-    {
-        return repo.findById(Id).map(mapper::toDTO).orElseThrow(()-> new  NotFoundException("Company", Id));
+    public CompanyDTO findById(Long id) {
+        return repo.findById(id)
+                .map(mapper::toDTO)
+                .orElseThrow(() -> new NotFoundException("Company", id));
     }
 
-    public CompanyDTO update(@Valid CompanyDTO dto)
-    {
-        CompanyEntity existing  = repo.findById(dto.getId()).orElseThrow(()-> new NotFoundException("Company",dto.getId()));
-        existing.setName(dto.getName());
-        existing.setGstNumber(dto.getGstNumber());
-        existing.setAddress(dto.getAddress());
-        existing.setFinancialYearStart(dto.getFinancialYearStart());
-        existing.setFinancialYearEnd(dto.getFinancialYearEnd());
-        existing.setBaseCurrency(dto.getBaseCurrency());
-        existing.setEnabled(dto.getEnabled());
-        return mapper.toDTO(repo.save(existing));
+    public CompanyDTO update(@Valid CompanyDTO dto) {
+        CompanyEntity existing = repo.findById(dto.getId())
+                .orElseThrow(() -> new NotFoundException("Company", dto.getId()));
+
+        mapper.updateEntityFromDto(dto, existing);
+
+        CompanyEntity saved = repo.save(existing);
+        return mapper.toDTO(saved);
     }
 
-    public void delete( Long id) {
+    public void delete(Long id) {
+        if (!repo.existsById(id)) {
+            throw new NotFoundException("Company", id);
+        }
         repo.deleteById(id);
     }
 }

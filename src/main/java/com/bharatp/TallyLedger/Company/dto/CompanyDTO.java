@@ -1,7 +1,7 @@
 package com.bharatp.TallyLedger.Company.dto;
 
-
-
+import com.bharatp.TallyLedger.Company.util.GSTRegistrationType;
+import com.bharatp.TallyLedger.Company.util.TaxExemptionType;
 import com.bharatp.TallyLedger.Company.util.ValidFinancialYear;
 import jakarta.validation.constraints.*;
 
@@ -9,33 +9,61 @@ import java.time.LocalDate;
 
 @ValidFinancialYear
 public class CompanyDTO {
+
     private Long id;
 
-    @NotBlank (message = "Name must not be blank")
+    @NotBlank(message = "Company name is required")
     private String name;
 
-    @NotBlank(message = "GST Number is mandatory")
-    @Pattern(
-            regexp = "\\d{2}[A-Z]{5}\\d{4}[A-Z]{1}[A-Z\\d]{1}[Z]{1}[A-Z\\d]{1}",
-            message = "GST must follow the format 29ABCDE1234F1Z5"
-    )
-    private String gstNumber;
+    private String alias;
+    private String mailingName;
 
-    @NotBlank(message = "Address must not be null")
-    private String address;
+    @NotBlank(message = "PAN is mandatory")
+    @Pattern(regexp = "[A-Z]{5}[0-9]{4}[A-Z]{1}", message = "Invalid PAN format")
+    private String panNumber;
 
-    @NotNull(message = "Year Start should not be empty.")
+    @Pattern(regexp = "[UL][0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}", message = "Invalid CIN format")
+    private String cinNumber;
+
+    @Email(message = "Invalid email format")
+    private String email;
+
+    @Pattern(regexp = "\\d{10}", message = "Phone must be 10 digits")
+    private String mobile;
+
+    private String telephone;
+    private String website;
+
+    private String gstin;
+
+    private String iecCode;
+
+    @NotNull
+    private GSTRegistrationType gstRegistrationType;
+
+    @NotNull
+    private TaxExemptionType taxExemptionType;
+
+    private String taxExemptionDetails;
+
+    private boolean enabled = true;
+
+    @NotNull(message = "Financial year start is required")
     private LocalDate financialYearStart;
 
-    @NotNull(message = "Year End should not be empty.")
+    @NotNull(message = "Financial year end is required")
     private LocalDate financialYearEnd;
 
-    @NotEmpty(message = "Base Currency is required.")
+    private LocalDate booksBeginFrom;
+
+    @NotBlank(message = "Base currency required")
     private String baseCurrency;
 
-    private Boolean enabled = true;
+    private Boolean multiCurrencyEnabled;
 
-    // Getters and setters
+    @NotNull
+    private AddressDTO address;
+
     public Long getId() {
         return id;
     }
@@ -52,20 +80,116 @@ public class CompanyDTO {
         this.name = name;
     }
 
-    public String getGstNumber() {
-        return gstNumber;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setGstNumber(String gstNumber) {
-        this.gstNumber = gstNumber;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
-    public String getAddress() {
-        return address;
+    public String getMailingName() {
+        return mailingName;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setMailingName(String mailingName) {
+        this.mailingName = mailingName;
+    }
+
+    public String getPanNumber() {
+        return panNumber;
+    }
+
+    public void setPanNumber(String panNumber) {
+        this.panNumber = panNumber;
+    }
+
+    public String getCinNumber() {
+        return cinNumber;
+    }
+
+    public void setCinNumber(String cinNumber) {
+        this.cinNumber = cinNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getGstin() {
+        return gstin;
+    }
+
+    public void setGstin(String gstin) {
+        this.gstin = gstin;
+    }
+
+    public String getIecCode() {
+        return iecCode;
+    }
+
+    public void setIecCode(String iecCode) {
+        this.iecCode = iecCode;
+    }
+
+    public GSTRegistrationType getGstRegistrationType() {
+        return gstRegistrationType;
+    }
+
+    public void setGstRegistrationType(GSTRegistrationType gstRegistrationType) {
+        this.gstRegistrationType = gstRegistrationType;
+    }
+
+    public TaxExemptionType getTaxExemptionType() {
+        return taxExemptionType;
+    }
+
+    public void setTaxExemptionType(TaxExemptionType taxExemptionType) {
+        this.taxExemptionType = taxExemptionType;
+    }
+
+    public String getTaxExemptionDetails() {
+        return taxExemptionDetails;
+    }
+
+    public void setTaxExemptionDetails(String taxExemptionDetails) {
+        this.taxExemptionDetails = taxExemptionDetails;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public LocalDate getFinancialYearStart() {
@@ -84,6 +208,14 @@ public class CompanyDTO {
         this.financialYearEnd = financialYearEnd;
     }
 
+    public LocalDate getBooksBeginFrom() {
+        return booksBeginFrom;
+    }
+
+    public void setBooksBeginFrom(LocalDate booksBeginFrom) {
+        this.booksBeginFrom = booksBeginFrom;
+    }
+
     public String getBaseCurrency() {
         return baseCurrency;
     }
@@ -92,11 +224,19 @@ public class CompanyDTO {
         this.baseCurrency = baseCurrency;
     }
 
-    public Boolean getEnabled() {
-        return enabled;
+    public Boolean getMultiCurrencyEnabled() {
+        return multiCurrencyEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setMultiCurrencyEnabled(Boolean multiCurrencyEnabled) {
+        this.multiCurrencyEnabled = multiCurrencyEnabled;
+    }
+
+    public AddressDTO getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address) {
+        this.address = address;
     }
 }
