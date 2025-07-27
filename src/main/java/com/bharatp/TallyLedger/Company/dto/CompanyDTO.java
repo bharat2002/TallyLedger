@@ -2,10 +2,12 @@ package com.bharatp.TallyLedger.Company.dto;
 
 
 
+import com.bharatp.TallyLedger.Company.util.ValidFinancialYear;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
+@ValidFinancialYear
 public class CompanyDTO {
     private Long id;
 
