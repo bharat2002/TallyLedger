@@ -1,6 +1,6 @@
 package com.bharatp.TallyLedger.Group.mapper;
 
-import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,13 +13,13 @@ public interface GroupMapper {
     GroupMapper INSTANCE = Mappers.getMapper(GroupMapper.class);
 
 
-    GroupMappingDTO toDTO(GroupEntity entity);
+    GroupDTO toDTO(GroupEntity entity);
 
     @Mappings( {
         @Mapping(target = "createdAt", ignore = true),
         @Mapping(target = "updatedAt", ignore = true)
     })
-    GroupEntity toEntity(GroupMappingDTO dto);
+    GroupEntity toEntity(GroupDTO dto);
 
-    void updateEntityFromDto(GroupMappingDTO dto, @MappingTarget GroupEntity entity);
+    void updateEntityFromDto(GroupDTO dto, @MappingTarget GroupEntity entity);
 }

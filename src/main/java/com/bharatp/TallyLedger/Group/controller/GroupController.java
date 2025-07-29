@@ -1,6 +1,6 @@
 package com.bharatp.TallyLedger.Group.controller;
 
-import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.service.GroupService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -25,22 +25,22 @@ public class GroupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GroupMappingDTO create(@RequestBody @Valid GroupMappingDTO dto) {
+    public GroupDTO create(@RequestBody @Valid GroupDTO dto) {
         return service.create(dto);
     }
 
     @GetMapping
-    public List<GroupMappingDTO> list() {
+    public List<GroupDTO> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public GroupMappingDTO get(@PathVariable @Min(1) Long id) {
+    public GroupDTO get(@PathVariable @Min(1) Long id) {
         return service.findById(id);
     }
 
     @PutMapping("/{id}")
-    public GroupMappingDTO update(@PathVariable @Min(1) Long id, @RequestBody @Valid GroupMappingDTO dto) {
+    public GroupDTO update(@PathVariable @Min(1) Long id, @RequestBody @Valid GroupDTO dto) {
         dto.setId(id);
         return service.update(dto);
     }

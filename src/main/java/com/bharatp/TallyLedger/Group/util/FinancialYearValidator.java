@@ -1,12 +1,12 @@
 package com.bharatp.TallyLedger.Group.util;
 
 
-import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 
-public class FinancialYearValidator implements ConstraintValidator<ValidFinancialYear, GroupMappingDTO> {
+public class FinancialYearValidator implements ConstraintValidator<ValidFinancialYear, GroupDTO> {
 
 
     @Override
@@ -15,7 +15,7 @@ public class FinancialYearValidator implements ConstraintValidator<ValidFinancia
     }
 
     @Override
-    public boolean isValid(GroupMappingDTO companyDTO, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(GroupDTO companyDTO, ConstraintValidatorContext constraintValidatorContext) {
         if(null == companyDTO || companyDTO.getFinancialYearStart() == null ||companyDTO.getFinancialYearEnd() == null)
         {
             return true;

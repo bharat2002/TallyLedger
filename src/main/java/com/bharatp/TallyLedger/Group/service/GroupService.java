@@ -1,7 +1,7 @@
 package com.bharatp.TallyLedger.Group.service;
 
 import com.bharatp.TallyLedger.Common.Exeption.NotFoundException;
-import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import com.bharatp.TallyLedger.Group.mapper.GroupMapper;
 import com.bharatp.TallyLedger.Group.repository.GroupRepository;
@@ -24,7 +24,7 @@ public class GroupService {
         this.mapper = mapper;
     }
 
-    public GroupMappingDTO create(@Valid GroupMappingDTO dto) {
+    public GroupDTO create(@Valid GroupDTO dto) {
         if (repo.existsByName(dto.getName())) {
             throw new DuplicateCompanyException("name", dto.getName());
         }
@@ -46,20 +46,20 @@ public class GroupService {
         return mapper.toDTO(entity);
     }
 
-    public List<GroupMappingDTO> findAll() {
+    public List<GroupDTO> findAll() {
         return repo.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public GroupMappingDTO findById(Long id) {
+    public GroupDTO findById(Long id) {
         return repo.findById(id)
                 .map(mapper::toDTO)
                 .orElseThrow(() -> new NotFoundException("Company", id));
     }
 
-    public GroupMappingDTO update(@Valid GroupMappingDTO dto) {
+    public GroupDTO update(@Valid GroupDTO dto) {
         GroupEntity existing = repo.findById(dto.getId())
                 .orElseThrow(() -> new NotFoundException("Company", dto.getId()));
 

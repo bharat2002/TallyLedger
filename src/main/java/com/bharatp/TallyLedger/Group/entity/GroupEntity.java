@@ -1,17 +1,21 @@
 package com.bharatp.TallyLedger.Group.entity;
+import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
 import com.bharatp.TallyLedger.Group.util.GSTRegistrationType;
+import com.bharatp.TallyLedger.Group.util.GroupNature;
 import com.bharatp.TallyLedger.Group.util.TaxExemptionType;
 import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Set;
+
 @Entity
 @Table(
         name = "account_groups",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"name", "company_id", "parent_id"}
         )
-})
+)
 public class GroupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +54,102 @@ public class GroupEntity {
     @PreUpdate
     public void touchUpdatedAt() {
         this.updatedAt = Instant.now();
+    }
+
+
+    public GroupEntity(Long id, String name, GroupEntity parent, Set<GroupEntity> children, CompanyEntity company, GroupNature nature, boolean affectsGrossProfit, boolean reserved, Instant createdAt, Instant updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.parent = parent;
+        this.children = children;
+        this.company = company;
+        this.nature = nature;
+        this.affectsGrossProfit = affectsGrossProfit;
+        this.reserved = reserved;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public GroupEntity() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public GroupEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(GroupEntity parent) {
+        this.parent = parent;
+    }
+
+    public Set<GroupEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<GroupEntity> children) {
+        this.children = children;
+    }
+
+    public CompanyEntity getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
+    }
+
+    public GroupNature getNature() {
+        return nature;
+    }
+
+    public void setNature(GroupNature nature) {
+        this.nature = nature;
+    }
+
+    public boolean isAffectsGrossProfit() {
+        return affectsGrossProfit;
+    }
+
+    public void setAffectsGrossProfit(boolean affectsGrossProfit) {
+        this.affectsGrossProfit = affectsGrossProfit;
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
