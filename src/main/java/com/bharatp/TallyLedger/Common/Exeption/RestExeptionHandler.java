@@ -1,6 +1,7 @@
 package com.bharatp.TallyLedger.Common.Exeption;
 
 import com.bharatp.TallyLedger.Common.Defines.CustomHTTPStatus;
+import com.bharatp.TallyLedger.Company.util.DuplicateCompanyException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -118,5 +119,17 @@ public class RestExeptionHandler {
                 .create();
     }
 
-
+    @ExceptionHandler(DuplicateCompanyException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDTO handleDuplicateCompany(DuplicateCompanyException ex, HttpServletRequest request)
+    {
+        return new ErrorResponseDTO.ErrorResponseBuilder()
+                .setTimeStamp(LocalDateTime.now())
+                .setStatus(HttpStatus.CONFLICT.value())
+                .setError(HttpStatus.CONFLICT.getReasonPhrase())
+                .setMessage(ex.getMessage())
+                .setPath(request.getRequestURI())
+                .setErrors(List.of(ex.getMessage()))
+                .create();
+    }
 }

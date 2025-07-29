@@ -1,9 +1,9 @@
-package com.bharatp.TallyLedger.Company.repository;
+package com.bharatp.TallyLedger.Group.repository;
 
-import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
+import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>
+public interface GroupRepository extends JpaRepository<GroupEntity, Long>
 {
     boolean existsByName(String name);
     boolean existsByPanNumber(String panNumber);

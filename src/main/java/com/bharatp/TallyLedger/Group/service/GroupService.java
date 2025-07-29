@@ -1,11 +1,11 @@
-package com.bharatp.TallyLedger.Company.service;
+package com.bharatp.TallyLedger.Group.service;
 
 import com.bharatp.TallyLedger.Common.Exeption.NotFoundException;
-import com.bharatp.TallyLedger.Company.dto.CompanyDTO;
-import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
-import com.bharatp.TallyLedger.Company.mapper.CompanyMapper;
-import com.bharatp.TallyLedger.Company.repository.CompanyRepository;
-import com.bharatp.TallyLedger.Company.util.DuplicateCompanyException;
+import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.entity.GroupEntity;
+import com.bharatp.TallyLedger.Group.mapper.GroupMapper;
+import com.bharatp.TallyLedger.Group.repository.GroupRepository;
+import com.bharatp.TallyLedger.Group.util.DuplicateCompanyException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CompanyService {
+public class GroupService {
 
-    private final CompanyRepository repo;
-    private final CompanyMapper mapper;
+    private final GroupRepository repo;
+    private final GroupMapper mapper;
 
     @Autowired
-    public CompanyService(CompanyRepository repo, CompanyMapper mapper) {
+    public GroupService(GroupRepository repo, GroupMapper mapper) {
         this.repo = repo;
         this.mapper = mapper;
     }
 
-    public CompanyDTO create(@Valid CompanyDTO dto) {
+    public GroupMappingDTO create(@Valid GroupMappingDTO dto) {
         if (repo.existsByName(dto.getName())) {
             throw new DuplicateCompanyException("name", dto.getName());
         }
@@ -41,31 +41,31 @@ public class CompanyService {
             throw new DuplicateCompanyException("CIN", dto.getCinNumber());
         }
 
-        CompanyEntity entity = mapper.toEntity(dto);
+        GroupEntity entity = mapper.toEntity(dto);
         entity = repo.save(entity);
         return mapper.toDTO(entity);
     }
 
-    public List<CompanyDTO> findAll() {
+    public List<GroupMappingDTO> findAll() {
         return repo.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public CompanyDTO findById(Long id) {
+    public GroupMappingDTO findById(Long id) {
         return repo.findById(id)
                 .map(mapper::toDTO)
                 .orElseThrow(() -> new NotFoundException("Company", id));
     }
 
-    public CompanyDTO update(@Valid CompanyDTO dto) {
-        CompanyEntity existing = repo.findById(dto.getId())
+    public GroupMappingDTO update(@Valid GroupMappingDTO dto) {
+        GroupEntity existing = repo.findById(dto.getId())
                 .orElseThrow(() -> new NotFoundException("Company", dto.getId()));
 
         mapper.updateEntityFromDto(dto, existing);
 
-        CompanyEntity saved = repo.save(existing);
+        GroupEntity saved = repo.save(existing);
         return mapper.toDTO(saved);
     }
 

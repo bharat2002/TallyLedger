@@ -1,7 +1,7 @@
-package com.bharatp.TallyLedger.Company.controller;
+package com.bharatp.TallyLedger.Group.controller;
 
-import com.bharatp.TallyLedger.Company.dto.CompanyDTO;
-import com.bharatp.TallyLedger.Company.service.CompanyService;
+import com.bharatp.TallyLedger.Group.dto.GroupMappingDTO;
+import com.bharatp.TallyLedger.Group.service.GroupService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,33 +14,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/companies")
 @Validated
-public class CompanyController {
-    private final CompanyService service;
+public class GroupController {
+    private final GroupService service;
 
     @Autowired
-    CompanyController(CompanyService service)
+    GroupController(GroupService service)
     {
         this.service = service;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompanyDTO create(@RequestBody @Valid CompanyDTO dto) {
+    public GroupMappingDTO create(@RequestBody @Valid GroupMappingDTO dto) {
         return service.create(dto);
     }
 
     @GetMapping
-    public List<CompanyDTO> list() {
+    public List<GroupMappingDTO> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public CompanyDTO get(@PathVariable @Min(1) Long id) {
+    public GroupMappingDTO get(@PathVariable @Min(1) Long id) {
         return service.findById(id);
     }
 
     @PutMapping("/{id}")
-    public CompanyDTO update(@PathVariable @Min(1) Long id, @RequestBody @Valid CompanyDTO dto) {
+    public GroupMappingDTO update(@PathVariable @Min(1) Long id, @RequestBody @Valid GroupMappingDTO dto) {
         dto.setId(id);
         return service.update(dto);
     }

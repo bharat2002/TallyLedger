@@ -1,15 +1,18 @@
-package com.bharatp.TallyLedger.Company.dto;
+package com.bharatp.TallyLedger.Group.dto;
 
-import com.bharatp.TallyLedger.Company.util.GSTRegistrationType;
-import com.bharatp.TallyLedger.Company.util.TaxExemptionType;
-import com.bharatp.TallyLedger.Company.util.ValidFinancialYear;
+import com.bharatp.TallyLedger.Group.util.GSTRegistrationType;
+import com.bharatp.TallyLedger.Group.util.TaxExemptionType;
+import com.bharatp.TallyLedger.Group.util.ValidFinancialYear;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
 @ValidFinancialYear
-public class CompanyDTO {
+public class GroupMappingDTO {
 
     private Long id;
 

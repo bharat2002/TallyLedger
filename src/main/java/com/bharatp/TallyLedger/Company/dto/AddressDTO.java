@@ -10,6 +10,17 @@ public class AddressDTO {
 
     private String addressLine2;
 
+    @NotBlank(message = "City is required")
+    private String city;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     @NotBlank(message = "State is required")
     private String state;
 
