@@ -2,6 +2,7 @@ package com.bharatp.TallyLedger.Group.controller;
 
 import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.service.GroupService;
+import com.bharatp.TallyLedger.Group.service.GroupServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,10 @@ import java.util.List;
 @RequestMapping("/api/v1/companies")
 @Validated
 public class GroupController {
-    private final GroupService service;
+    private final GroupServiceImpl service;
 
     @Autowired
-    GroupController(GroupService service)
+    GroupController(GroupServiceImpl service)
     {
         this.service = service;
     }
@@ -26,7 +27,7 @@ public class GroupController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GroupDTO create(@RequestBody @Valid GroupDTO dto) {
-        return service.create(dto);
+        return service.createGroup(dto);
     }
 
     @GetMapping

@@ -8,10 +8,11 @@ public class GroupDTO {
     private Long id;
 
     @NotBlank(message = "Group name must not be blank")
-    @Size(min = 2, max = 100, message = "Group name must be between 2 and 100 characters")
-    @Pattern(regexp = "^[A-Za-z0-9 _-]+$", message = "Group name can only contain letters, numbers, spaces, hyphens, and underscores")
+    @Size(min = 2, max = 100, message = "Group name length must be between 2 and 100 characters")
+    @Pattern(regexp = "^[A-Za-z0-9 _-]+$", message = "Group name may only contain letters, numbers, spaces, hyphens, and underscores")
     private String name;
 
+    @Min(value = 1, message = "parentId must be a positive number")
     private Long parentId;
 
     @NotNull(message = "Group nature is required")
@@ -30,7 +31,7 @@ public class GroupDTO {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name.trim() : null;
     }
 
     public void setName(String name) {

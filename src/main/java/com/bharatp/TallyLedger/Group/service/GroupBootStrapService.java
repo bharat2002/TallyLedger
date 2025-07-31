@@ -12,9 +12,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Bootstraps a standard Chart of Accounts (Tally‑style) for each new company.
- */
+
 @Service
 public class GroupBootstrapService {
 
@@ -27,15 +25,12 @@ public class GroupBootstrapService {
         this.companyRepo = companyRepo;
     }
 
-    /**
-     * Inserts reserved (system) groups & sub‑groups for the given company.
-     */
+
     @Transactional
     public void initDefaultsForCompany(Long companyId) {
         CompanyEntity company = companyRepo.findById(companyId)
                 .orElseThrow(() -> new IllegalArgumentException("Company not found: " + companyId));
 
-        // Avoid re‑bootstrapping if already done
         if (groupRepo.existsByCompanyAndReservedTrue(company)) {
             return;
         }

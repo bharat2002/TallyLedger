@@ -1,12 +1,21 @@
 package com.bharatp.TallyLedger.Group.repository;
 
+import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
 import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GroupRepository extends JpaRepository<GroupEntity, Long>
-{
-    boolean existsByName(String name);
-    boolean existsByPanNumber(String panNumber);
-    boolean existsByGstin(String gstin);
-    boolean existsByCinNumber(String cinNumber);
+import java.util.List;
+import java.util.Optional;
+
+public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
+
+    boolean existsByNameAndCompany_IdAndParent_Id(String name, Long companyId, Long parentId);
+
+    boolean existsByCompanyAndReservedTrue(CompanyEntity company);
+
+    List<GroupEntity> findByCompany_Id(Long companyId);
+
+    Optional<GroupEntity> findByCompany_IdAndId(Long companyId, Long id);
+
+    boolean existsByParent(GroupEntity parent);
 }
