@@ -6,6 +6,8 @@ import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
 import com.bharatp.TallyLedger.Company.mapper.CompanyMapper;
 import com.bharatp.TallyLedger.Company.repository.CompanyRepository;
 import com.bharatp.TallyLedger.Company.util.DuplicateCompanyException;
+import com.bharatp.TallyLedger.Group.service.GroupBootstrapService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,16 @@ public class CompanyService {
 
     private final CompanyRepository repo;
     private final CompanyMapper mapper;
+    private final GroupBootstrapService groupBootstrapService;
 
     @Autowired
-    public CompanyService(CompanyRepository repo, CompanyMapper mapper) {
+    public CompanyService(CompanyRepository repo, CompanyMapper mapper, GroupBootstrapService bootstrapService) {
         this.repo = repo;
         this.mapper = mapper;
+        this.groupBootstrapService = bootstrapService;
     }
 
+    @Transactional
     public CompanyDTO create(@Valid CompanyDTO dto) {
         if (repo.existsByName(dto.getName())) {
             throw new DuplicateCompanyException("name", dto.getName());
@@ -43,6 +48,7 @@ public class CompanyService {
 
         CompanyEntity entity = mapper.toEntity(dto);
         entity = repo.save(entity);
+        groupBootstrapService.initDefaultsForCompany(entity.getId());
         return mapper.toDTO(entity);
     }
 

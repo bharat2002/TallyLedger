@@ -51,11 +51,14 @@ public class GroupEntity {
     @Column(nullable = false)
     private Instant updatedAt = Instant.now();
 
+    public static GroupEntityBuilder builder() {
+        return new GroupEntityBuilder();
+    }
+
     @PreUpdate
     public void touchUpdatedAt() {
         this.updatedAt = Instant.now();
     }
-
 
     public GroupEntity(Long id, String name, GroupEntity parent, Set<GroupEntity> children, CompanyEntity company, GroupNature nature, boolean affectsGrossProfit, boolean reserved, Instant createdAt, Instant updatedAt) {
         this.id = id;
@@ -68,6 +71,59 @@ public class GroupEntity {
         this.reserved = reserved;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+    public static class GroupEntityBuilder
+    {
+        private CompanyEntity company;
+        private GroupEntity parent;
+        private String name;
+        private GroupNature nature;
+        private boolean affectsGrossProfit;
+        private boolean reserved;
+
+        public GroupEntityBuilder setCompany(CompanyEntity company) {
+            this.company = company;
+            return this;
+        }
+
+        public GroupEntityBuilder setParent(GroupEntity parent) {
+            this.parent = parent;
+            return this;
+        }
+
+        public GroupEntityBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public GroupEntityBuilder setNature(GroupNature nature) {
+            this.nature = nature;
+            return this;
+        }
+
+        public GroupEntityBuilder setAffectsGrossProfit(boolean affectsGrossProfit) {
+            this.affectsGrossProfit = affectsGrossProfit;
+            return this;
+        }
+
+        public GroupEntityBuilder setResrved(boolean resrved) {
+            this.reserved = resrved;
+            return this;
+        }
+
+        public GroupEntity build()
+        {
+            GroupEntity entity = new GroupEntity();
+            entity.setCompany(this.company);
+            entity.setParent(this.parent);
+            entity.setName(this.name);
+            entity.setNature(this.nature);
+            entity.setAffectsGrossProfit(this.affectsGrossProfit);
+            entity.setReserved(this.reserved);
+            entity.setCreatedAt(Instant.now());
+            entity.setUpdatedAt(Instant.now());
+            return entity;
+        }
     }
 
     public GroupEntity() {

@@ -89,26 +89,24 @@ public class GroupBootstrapService {
         groupRepo.saveAll(toSave);
     }
 
-    /** Helper to build a top‑level (parent) group */
-    private GroupEntity buildTopGroup(String name, CompanyEntity company, GroupNature nature) {
-        return GroupEntity.builder()
-                .company(company)
-                .name(name)
-                .nature(nature)
-                .affectsGrossProfit(nature == GroupNature.INCOME)
-                .reserved(true)
-                .build();
-    }
-
-    /** Helper to build a sub‑group under a parent */
     private GroupEntity buildSubGroup(String name, GroupEntity parent, GroupNature nature) {
         return GroupEntity.builder()
-                .company(parent.getCompany())
-                .parent(parent)
-                .name(name)
-                .nature(nature)
-                .affectsGrossProfit(nature == GroupNature.EXPENSE || nature == GroupNature.INCOME)
-                .reserved(true)
+                .setCompany(parent.getCompany())
+                .setParent(parent)
+                .setName(name)
+                .setNature(nature)
+                .setAffectsGrossProfit(nature == GroupNature.EXPENSE || nature == GroupNature.INCOME)
+                .setResrved(true).
+                build();
+    }
+
+    private GroupEntity buildTopGroup(String name, CompanyEntity company, GroupNature nature) {
+        return GroupEntity.builder()
+                .setCompany(company)
+                .setName(name)
+                .setNature(nature)
+                .setAffectsGrossProfit(nature == GroupNature.INCOME)
+                .setResrved(true)
                 .build();
     }
 }

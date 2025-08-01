@@ -7,6 +7,7 @@ import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import com.bharatp.TallyLedger.Group.mapper.GroupMapper;
 import com.bharatp.TallyLedger.Group.repository.GroupRepository;
+import com.bharatp.TallyLedger.Group.util.DuplicateGroupException;
 import com.bharatp.TallyLedger.Group.util.GroupNature;
 import com.bharatp.TallyLedger.Group.util.GroupService;
 import jakarta.transaction.Transactional;
@@ -32,9 +33,9 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public GroupDTO createGroup(GroupDTO groupDTO)
+    public GroupDTO createGroup(Long CompanyId,GroupDTO groupDTO)
     {
-        CompanyEntity company  = companyRepo.findById(groupDTO.getId()).orElseThrow(()->
+        CompanyEntity company  = companyRepo.findById(CompanyId).orElseThrow(()->
                         new NotFoundException("Company", groupDTO.getId())
                 );
 
@@ -42,12 +43,12 @@ public class GroupServiceImpl implements GroupService {
         GroupEntity parentGroup = null;
         if(null != parentId)
         {
-            parentGroup  = repo.findById(groupDTO.getId()).orElseThrow(()->
+            parentGroup  = repo.findById(parentId).orElseThrow(()->
                     new NotFoundException("Company", groupDTO.getId())
             );
         }
 
-        if(repo.existsByNameAndCompanyIdAndParentId(groupDTO.getName(),groupDTO.getId(),groupDTO.getParentId()))
+        if(repo.existsByNameAndCompany_IdAndParent_Id(groupDTO.getName(),groupDTO.getId(),groupDTO.getParentId()))
         {
             throw new RuntimeException("Group Already Exists");
         }
@@ -55,7 +56,14 @@ public class GroupServiceImpl implements GroupService {
         GroupEntity entity = mapper.toEntity(groupDTO);
         entity.setParent(parentGroup);
         entity.setCompany(company);
-        return mapper.toDTO(repo.save(mapper.toEntity(groupDTO)));
+        return mapper.toDTO(repo.save(entity));
+    }
+
+    @Override
+    public List<GroupDTO> getAllGroups() {
+        List<GroupDTO>groupDTOList =  repo.findAll().stream().map(mapper::toDTO).toList();
+        System.out.println(groupDTOList.stream().toString());
+        return groupDTOList;
     }
 
     @Override
@@ -91,18 +99,46 @@ public class GroupServiceImpl implements GroupService {
                     return new NotFoundException("Company", companyId);
                 }
         );
-        GroupEntity entity = repo.findByCompany_IdAndId(companyId, id);
+        GroupEntity entity = repo.findByCompany_IdAndId(companyId, id).orElseThrow(
+                ()-> new NotFoundException("Group", id)
+        );
+
+        if(entity.isReserved())
+        {
+            throw new IllegalStateException("Unable to modify reserved group.");
+        }
+        if (!entity.getName().equals(dto.getName())
+                && repo.existsByNameAndCompany_IdAndParent_Id(dto.getName(), companyId,
+                entity.getParent() != null ? entity.getParent().getId() : null)) {
+            throw new DuplicateGroupException("Group", dto.getName());
+        }
         mapper.updateEntityFromDto(dto,entity);
+        Long newParentId = dto.getParentId();
+        if (newParentId != null) {
+            GroupEntity newParent = repo.findById(newParentId)
+                    .orElseThrow(() -> new NotFoundException("Parent Group", newParentId));
+            entity.setParent(newParent);
+        } else {
+            entity.setParent(null);
+        }
+
+        GroupEntity saved = repo.save(entity);
+        return mapper.toDTO(saved);
 
     }
 
     @Override
-    public void deleteGroup(Long companyId, Long id) {
-
+    public void deleteGroup(Long companyId, Long id)
+    {
+        GroupEntity entity = repo.findByCompany_IdAndId(companyId, id).orElseThrow(
+                ()-> {throw new NotFoundException("Group", id);}
+        );
+        repo.deleteByCompany_IdAndId(companyId, id);
     }
 
     @Override
-    public List<GroupDTO> getGroupsByNature(GroupNature nature) {
-        return List.of();
+    public List<GroupDTO> getGroupsByNature(GroupNature nature)
+    {
+        return repo.findByNature(nature).stream().map(mapper::toDTO).toList();
     }
 }

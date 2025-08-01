@@ -4,7 +4,7 @@ import com.bharatp.TallyLedger.Group.dto.GroupDTO;
 import com.bharatp.TallyLedger.Group.entity.GroupEntity;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface GroupMapper {
 
     @Mapping(source = "parent.id", target = "parentId")
