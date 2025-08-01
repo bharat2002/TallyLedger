@@ -91,7 +91,7 @@ public class GroupServiceImpl implements GroupService {
                     return new NotFoundException("Company", companyId);
                 }
         );
-        GroupEntity entity = repo.findByCompany_IdAndId(companyId, id).;
+        GroupEntity entity = repo.findByCompany_IdAndId(companyId, id);
         mapper.updateEntityFromDto(dto,entity);
 
     }
