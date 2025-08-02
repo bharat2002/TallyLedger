@@ -65,6 +65,9 @@ public class GroupBootstrapService {
         // Sub‑groups under Current Liabilities
         toSave.add(buildSubGroup("Sundry Creditors", currentLiab, GroupNature.CURRENT_LIABILITIES));
         toSave.add(buildSubGroup("Provisions",       currentLiab, GroupNature.CURRENT_LIABILITIES));
+        toSave.add(buildSubGroup("Suspense Account", currentLiab, GroupNature.CURRENT_LIABILITIES));
+        toSave.add(buildSubGroup("Duties & Taxes", currentLiab, GroupNature.CURRENT_LIABILITIES));
+
 
         // Sub‑groups under Equity
         toSave.add(buildSubGroup("Capital Account", equity, GroupNature.EQUITY));

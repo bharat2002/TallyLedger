@@ -23,4 +23,6 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
     List<GroupEntity> findByNature(GroupNature nature);
 
     void deleteByCompany_IdAndId(Long companyId, Long id);
+    Optional<GroupEntity> findByNameAndCompany_Id(String name, Long companyId);
+
 }

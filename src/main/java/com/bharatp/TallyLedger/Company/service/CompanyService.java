@@ -7,6 +7,7 @@ import com.bharatp.TallyLedger.Company.mapper.CompanyMapper;
 import com.bharatp.TallyLedger.Company.repository.CompanyRepository;
 import com.bharatp.TallyLedger.Company.util.DuplicateCompanyException;
 import com.bharatp.TallyLedger.Group.service.GroupBootstrapService;
+import com.bharatp.TallyLedger.Ledger.Service.ReservedLedgerBootstrapService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,14 @@ public class CompanyService {
     private final CompanyRepository repo;
     private final CompanyMapper mapper;
     private final GroupBootstrapService groupBootstrapService;
+    private final ReservedLedgerBootstrapService reservedLedgerBootstrapService;
 
     @Autowired
-    public CompanyService(CompanyRepository repo, CompanyMapper mapper, GroupBootstrapService bootstrapService) {
+    public CompanyService(CompanyRepository repo, CompanyMapper mapper, GroupBootstrapService bootstrapService, ReservedLedgerBootstrapService reservedLedgerBootstrapService) {
         this.repo = repo;
         this.mapper = mapper;
         this.groupBootstrapService = bootstrapService;
+        this.reservedLedgerBootstrapService = reservedLedgerBootstrapService ;
     }
 
     @Transactional
@@ -49,6 +52,7 @@ public class CompanyService {
         CompanyEntity entity = mapper.toEntity(dto);
         entity = repo.save(entity);
         groupBootstrapService.initDefaultsForCompany(entity.getId());
+        reservedLedgerBootstrapService.initReservedLedgers(entity.getId());
         return mapper.toDTO(entity);
     }
 

@@ -1,12 +1,8 @@
 package com.bharatp.TallyLedger.Group.entity;
 import com.bharatp.TallyLedger.Company.entity.CompanyEntity;
-import com.bharatp.TallyLedger.Group.util.GSTRegistrationType;
 import com.bharatp.TallyLedger.Group.util.GroupNature;
-import com.bharatp.TallyLedger.Group.util.TaxExemptionType;
 import jakarta.persistence.*;
-
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
