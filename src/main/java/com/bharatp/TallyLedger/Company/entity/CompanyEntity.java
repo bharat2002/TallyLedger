@@ -1,5 +1,4 @@
 package com.bharatp.TallyLedger.Company.entity;
-import com.bharatp.TallyLedger.Company.dto.AddressDTO;
 import com.bharatp.TallyLedger.Company.util.GSTRegistrationType;
 import com.bharatp.TallyLedger.Company.util.TaxExemptionType;
 import jakarta.persistence.*;
