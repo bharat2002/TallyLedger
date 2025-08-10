@@ -1,4 +1,4 @@
 package com.bharatp.TallyLedger.voucher.service;
 
-public class VoucherEntryService {
+public class VoucherEntryServiceImpl {
 }
